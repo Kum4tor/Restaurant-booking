@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Book a Table
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style_booking.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body onload="validHome()">
+    <div class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="navbar-brand">FOOD LORD</div>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="./welcome.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">Book a table</a>
+          </li>
+          <li class="nav-item">
+            <a href="./order_details.html" class="nav-link">Order History</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Contact us</a>
+          </li>
+        </ul>
+        <ul class = "nav navbar-nav navbar-right">
+          <li class="nav-item">
+            <a class="nav-link"> <script>var name = localStorage.getItem('name');
+            document.write(name);</script></a>
+          </li>
+          <li class="nav-item">
+            <a href="./sign-in.html" class="nav-link" onclick="destroyToken()">Logout</a>
+          </li>
+        </ul>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+    <form class="form-horizontal" onsubmit="return validBooking()">
+        <img src="./booking.png" alt="order_icon" class="img-thumb">
+        <div class="form-group">
+        <label for="seats_no">Enter seats:</label>
+        <input type="number" id="seats_no" class="form-control" name="seats_no" min=1 max=10 placeholder="Number of seats" required/>
+        </div>
+        <br>
+        <div class="form-group">
+        <label for="seat_type">Seat Type:</label>
+        <select id="seat_type" class="form-control" required>
+            <option selected>........</option>
+            <option value="Roof Top">Roof Top</option>
+            <option value="Dining">Dining</option>
+            <option value="Family Room">Family Room</option>
+            <option value="Party Hall">Party Hall</option>
+            <option value="Ball Room">Ball Room</option>
+            <option value="Buffet">Buffet</option>
+        </select>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="time">Enter Timing:</label>
+            <select id="time" class="form-control" required>
+                <option selected>.......</option>
+                <option value="Break Fast">Break Fast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+            </select>
+            <small>
+            <input type="checkbox" value="premium" id="premium">
+            <label for="premium">Premium</label>
+            </small>
+        </div>
+        <br>
+        <div class="form-control">
+            <input type="checkbox" value="spl_occasion" id="spl_occ">
+            <label for="spl_occ">Is this any special occasion</label>
+        </div>
+        <br>
+        <button type="submit" id="btn" class="btn btn-warning">Submit</button>
+    </form>
+    </div>
+
+    <script>
+      function validBooking() {
+        const table_type = document.getElementById("seat_type").value;
+        const time = document.getElementById("time").value;
+        const no_of_seats = document.getElementById("seats_no").value;
+        const data_to_api = {
+            table_type : table_type,
+            session_time : time,
+            no_of_seats : no_of_seats
+        }
+
+        document.getElementById("seat_type").value = "";
+        document.getElementById("time").value = "";
+        document.getElementById("seats_no").value = 0;
+        document.getElementById("premium").checked = false;
+        document.getElementById("spl_occ").checked = false;
+
+        const token = localStorage.getItem('token')
+        if(!token) {
+          location.replace('./signin.html');
+        }
+        fetch('http://localhost:5000/api/book', {
+            method: "POST",
+            body: JSON.stringify(data_to_api),
+            headers: { "Content-type": "application/json; charset=UTF-8","auth-token": token}
+        })
+            .then(response => response.text())
+            .then(text => alert("Booking Sucess"))
+            .catch(err => console.log(err))
+        return false;
+      }
+      function destroyToken(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('name');
+        }
+        function validHome(){
+            const token = localStorage.getItem('token');
+            if(!token){
+                location.replace('./sign-in.html');
+            }
+          }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+.navbar-brand {
+  font-weight: bolder;
+  padding-left: 15px;
+}
+
+.back_gradient {
+  background-image: url("./19449872-edit1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.nav-item {
+  font-weight: bold;
+}
+
+.navbar-right {
+  margin-left: 750px;
+}
+
+.center-align {
+  justify-content: center;
+  font-weight: bold;
+  margin-left: 50px;
+  margin-top: 200px;
+}
+
+.img-resize {
+  width: 750px;
+  height: 650px;
+}
+
+.book-btn {
+  text-align: center;
+  margin-top: 75px;
+  margin-left: 100px;
+  font-weight: bold;
+}
+
+#order {
+  margin-top: 50px;
+  width: 950px;
+}

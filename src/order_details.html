@@ -1,0 +1,99 @@
+<html>
+    <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="./style.css" rel = "stylesheet">
+
+    <title>Booking history</title>
+    </head>
+    <body onload="validDetails()">
+        
+        <div class="navbar navbar-dark bg-dark navbar-expand-lg">
+            <div class="navbar-brand">Food Lord</div>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a href="./welcome.html" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="./booking.html" class="nav-link">Book a table</a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link active">Order History</a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">Contact us</a>
+              </li>
+            </ul>
+            <ul class = "nav navbar-nav navbar-right">
+              
+                <li class="nav-item">
+                  <a class="nav-link"> <script>var name = localStorage.getItem('name');
+                  document.write(name);</script></a>
+              </li>
+              
+                <li class="nav-item">
+                <a href="./sign-in.html" class="nav-link" onclick=destroyToken()>Logout</a>
+              </li>
+              
+            </ul>
+          </div>
+          <div class="container" id="order">
+          <table class="table table-hover">
+              <thead class="bg-warning">
+                <th scope="col">Booking</th>
+                <th scope="col">Seat Type</th>
+                <th scope="col">No of seats</th>
+                <th scope="col">Time</th>
+                <th scope="col">Booked on</th>
+              </thead>
+              <tbody id="details" class=""></tbody>
+          </table>
+          </div>
+          <div id="res"></div>
+
+          <script>
+              function validDetails(){
+                const token = localStorage.getItem('token')
+                if(!token){
+                    location.replace('./sign-in.html');
+                }
+                fetch('http://localhost:5000/api/bdetails', {
+                method: "GET",
+                headers: { "Content-type": "application/json; charset=UTF-8",
+                            "auth-token": token}
+                })
+                .then(function (response) {
+                if(response.status == 200){
+                     
+                    response.text().then(function(text){
+                        text = JSON.parse(text);
+                        console.log(text[0].no_of_seats)
+                        for(var  i=0;i < text.length;i++){
+                            document.getElementById("details").innerHTML += "<tr>"+
+                                                                            "<th scope=\"row\">" + (i+1) + 
+                                                                            "<td/>" + text[i].table_type + 
+                                                                            "<td />" + text[i].no_of_seats + 
+                                                                            "<td />" + text[i].session_time + 
+                                                                            "<td />" + text[i].Book_time + 
+                                                                            "</tr>"
+                        }
+                    })
+    
+                    }
+                })
+            .catch(err => console.log(err))
+            return false;
+                }
+
+                function destroyToken(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('name');
+        }
+          </script>
+
+          </body>
+          </html>

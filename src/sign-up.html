@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <html>
+    <head>
+      <title>Sign Up</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta charset="utf-8" />
+      <link rel="stylesheet" type="text/css" href="style_sign_up.css" />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <link
+        href="https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600"
+        rel="stylesheet"
+        type="text/css"
+      />
+      <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    </head>
+
+    <body class="body">
+      <div class="login-page">
+        <div class="form">
+          <form>
+            <input type="text" placeholder="Full Name" id="name" />
+            <input type="email" placeholder="Email Address" id="email" />
+            <input type="password" id="password" placeholder="Set a password" />
+            <br>
+            <br>
+          </form>
+
+          <form class="login-form">
+            <button type="button" onclick="validateRegister()">
+              SIGN UP
+            </button>
+          </form>
+        </div>
+      </div>
+    </body>
+    <script>
+      function validateRegister(){
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const data_to_api = {
+            name: name,
+            email: email,
+            password: password
+        }
+         console.log(data_to_api);
+         fetch('http://localhost:5000/api/user/register', {
+            method: "POST",
+            body: JSON.stringify(data_to_api),
+            headers: { "Content-type": "application/json; charset=UTF-8"}
+        })
+        .then(function (response) {
+                if(response.status == 200){
+                     
+                    response.text().then(function(text){
+                      location.replace("sign-in.html");
+                    })
+                    
+                }
+                else
+                    alert("Enter valid details");
+            })
+            .catch(err => console.log(err))
+        return false;
+    }
+    </script>
+  </html>
+</html>
