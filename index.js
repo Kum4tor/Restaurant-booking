@@ -9,7 +9,7 @@ const homeRoute = require('./routes/home');
 
 dotenv.config();
 
-mongoose.connect('mongodb+srv://nandha:nandha@cluster0.fybzy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(process.env.DB_CONNECT,
     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
     () => console.log('connected to mongo db'));
 
